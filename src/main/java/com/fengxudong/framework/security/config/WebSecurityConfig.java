@@ -1,5 +1,6 @@
 package com.fengxudong.framework.security.config;
 
+import com.fengxudong.framework.base.config.FrameworkBaseConfig;
 import com.fengxudong.framework.cache.IFrameworkCache;
 import com.fengxudong.framework.security.filter.LoginFilter;
 import com.fengxudong.framework.security.filter.TokenFilter;
@@ -42,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()  //关闭csrf
                 .authorizeRequests()
                 // user不需要鉴权
-                .antMatchers("/user/**").permitAll()
+                .antMatchers(FrameworkBaseConfig.PERMIT_MATCHES).permitAll()
                 // 其他都需要
                 .anyRequest().authenticated()
                 .and()

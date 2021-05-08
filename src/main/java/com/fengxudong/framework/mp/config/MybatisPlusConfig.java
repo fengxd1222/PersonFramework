@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.parser.SqlParserHelper;
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.tenant.TenantHandler;
+import com.fengxudong.framework.base.config.FrameworkBaseConfig;
 import com.fengxudong.framework.mp.FrameworkMetaObjectHandler;
 import com.fengxudong.framework.mp.FrameworkSqlInjector;
 import com.fengxudong.framework.mp.FrameworkTenantSqlParser;
@@ -47,7 +48,6 @@ public class MybatisPlusConfig {
         PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
         /*
          * 【测试多租户】 SQL 解析处理拦截器<br>
-         * 这里固定写成住户 1 实际情况你可以从cookie读取，因此数据看不到 【 麻花藤 】 这条记录（ 注意观察 SQL ）<br>
          */
         List<ISqlParser> sqlParserList = new ArrayList<>();
         FrameworkTenantSqlParser tenantSqlParser = new FrameworkTenantSqlParser();
@@ -62,7 +62,7 @@ public class MybatisPlusConfig {
             public boolean doTableFilter(String tableName) {
                 final String filterTableName = "qrtz_blob_triggers,qrtz_calendars,qrtz_cron_triggers,qrtz_fired_triggers,"
                         + "qrtz_job_details,qrtz_locks,qrtz_paused_trigger_grps,qrtz_scheduler_state,qrtz_simple_triggers,"
-                        + "qrtz_simprop_triggers,qrtz_triggers" ;
+                        + "qrtz_simprop_triggers,qrtz_triggers," + FrameworkBaseConfig.FILTER_TABLES;
                 ArrayList<String> tableNames = Lists.newArrayList(filterTableName.split(","));
                 boolean isFilter = tableNames.contains(tableName);
                 return isFilter;
@@ -81,7 +81,7 @@ public class MybatisPlusConfig {
             @Override
             public boolean doFilter(MetaObject metaObject) {
                 MappedStatement ms = SqlParserHelper.getMappedStatement(metaObject);
-                // 过滤自定义查询此时无租户信息约束【 麻花藤 】出现
+                // 过滤自定义查询此时无租户信息约束
                 String id = ms.getId();
                 if (id.contains("selectById")||id.contains("updateById")||id.contains("DeleteById")||id.contains("selectMaps")) {
                     return true;
