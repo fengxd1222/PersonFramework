@@ -1,5 +1,6 @@
 package com.fengxudong.framework.security.filter;
 
+import com.fengxudong.framework.base.config.FrameworkBaseConfig;
 import com.fengxudong.framework.cache.IFrameworkCache;
 import com.fengxudong.framework.context.FrameworkContext;
 import com.fengxudong.framework.context.FrameworkContextHolder;
@@ -26,7 +27,7 @@ public class TokenFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String token = request.getHeader("token");
+        String token = request.getHeader(FrameworkBaseConfig.TOKEN_NAME);
         if(StringUtils.isEmpty(token)){
             chain.doFilter(request,response);
             return;

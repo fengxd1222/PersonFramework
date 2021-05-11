@@ -2,6 +2,7 @@ package com.fengxudong.framework.logic.controller;
 
 import com.fengxudong.framework.base.controller.FrameworkController;
 import com.fengxudong.framework.context.FrameworkContextHolder;
+import com.fengxudong.framework.init.RoleMapping;
 import com.fengxudong.framework.logic.service.ISecurityUserDetailService;
 import com.fengxudong.framework.response.FrameworkResCodeEnum;
 import com.fengxudong.framework.response.FrameworkResult;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping(value = {"/user","/users"})
 public class UserController extends FrameworkController {
 
     @Autowired
@@ -22,6 +23,7 @@ public class UserController extends FrameworkController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @RequestMapping("/register")
+    @RoleMapping(description = "注册用户")
     public FrameworkResult register(@RequestBody SecurityUserDetail securityUserDetail){
         return FrameworkContextHolder.withOrgExecute(securityUserDetail.getOrgId(),()->{
             SecurityUserDetail byName = securityUserDetailService.getByName(securityUserDetail.getUsername());
