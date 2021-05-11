@@ -30,13 +30,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authenticationManager;
 
-    private UserDetailService userDetailService;
-
     private IFrameworkCache frameworkCache;
 
-    public LoginFilter(AuthenticationManager authenticationManager, UserDetailService userDetailService, IFrameworkCache frameworkCache) {
+    public LoginFilter(AuthenticationManager authenticationManager, IFrameworkCache frameworkCache) {
         this.authenticationManager = authenticationManager;
-        this.userDetailService = userDetailService;
         this.frameworkCache = frameworkCache;
         super.setFilterProcessesUrl("/user/login");
     }
@@ -53,7 +50,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         UserInfo userInfo = new UserInfo();
-        SecurityUserDetail securityUserDetail = userDetailService.getByName(authResult.getName());
+        SecurityUserDetail securityUserDetail = (SecurityUserDetail) authResult.getPrincipal();
         userInfo.setUserId(securityUserDetail.getId());
         userInfo.setOrgId(securityUserDetail.getOrgId());
         userInfo.setUsername(authResult.getName());

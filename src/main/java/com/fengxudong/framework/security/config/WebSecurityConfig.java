@@ -47,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 其他都需要
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new LoginFilter(super.authenticationManager(),userDetailService,frameworkCache))
+                .addFilter(new LoginFilter(super.authenticationManager(),frameworkCache))
                 .addFilter(new TokenFilter(super.authenticationManager(),frameworkCache))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
